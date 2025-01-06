@@ -1,9 +1,9 @@
 {
 	"required": true,
-	"package": "com.example.mixin",
+	"package": "com.example.mixin.client",
 	"compatibilityLevel": "JAVA_21",
-	"mixins": [
-		"ExampleMixin"
+	"client": [
+		"com.github.prohect.mixin.client.MixinMouse"
 	],
 	"injectors": {
 		"defaultRequire": 1

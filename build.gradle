@@ -10,6 +10,10 @@ base {
 	archivesName = project.archives_base_name
 }
 
+loom {
+	accessWidenerPath = file("src/main/resources/tweakmousesensitivity.accesswidener")
+}
+
 repositories {
 	// Add repositories to retrieve artifacts from in here.
 	// You should only use this when depending on other mods because
@@ -22,7 +26,7 @@ loom {
 	splitEnvironmentSourceSets()
 
 	mods {
-		"modid" {
+		"tweakmousesensitivity" {
 			sourceSet sourceSets.main
 			sourceSet sourceSets.client
 		}
