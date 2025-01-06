@@ -2,7 +2,8 @@
 
 ## Why?
 
-As the DPI provided by mice continues to increase, the original mouse sensitivity settings become less effective at higher DPIs, such as 20000. This modification addresses this issue by simply multiplying the original mouse sensitivity by itself during processing.
+the dpi range provided by the mouse is going higher and higher, the origin mouse sensitivity procedure is not working cool when u set dpi to value like 20000.
+this mod only do one simple thing: multiply the origin mouse sensitivity by itself when processing
 
 ### Original Code:
 ```java
