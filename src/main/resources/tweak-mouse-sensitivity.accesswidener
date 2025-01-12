@@ -1,6 +1,5 @@
 accessWidener v2 named
 # Comments like this are supported, as well as at the end of the line
-accessible field net/minecraft/client/Mouse lastMouseUpdateTime D
 accessible field net/minecraft/client/Mouse client Lnet/minecraft/client/MinecraftClient;
 accessible field net/minecraft/client/Mouse cursorXSmoother Lnet/minecraft/client/util/SmoothUtil;
 accessible field net/minecraft/client/Mouse cursorDeltaX D

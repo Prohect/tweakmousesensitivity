@@ -1,8 +1,8 @@
 {
 	"schemaVersion": 1,
 	"id": "tweak-mouse-sensitivity",
-	"version": "1.0.0.0",
-	"name": "Tweak mouse sensitivity",
+	"version": "${version}",
+	"name": "tweak mouse sensitivity",
 	"description": "make a 20000 dpi or even higher mouse works fine in MC!",
 	"authors": [
 		"prohect@foxmail.com"
@@ -16,10 +16,10 @@
 	"environment": "*",
 	"entrypoints": {
 		"main": [
-			"com.github.TweakMouseSensitivity"
+			"com.github.prohect.TweakMouseSensitivity"
 		],
 		"client": [
-			"com.github.TweakMouseSensitivityClient"
+			"com.github.prohect.TweakMouseSensitivityClient"
 		]
 	},
 	"mixins": [
@@ -32,8 +32,8 @@
 	"accessWidener": "tweak-mouse-sensitivity.accesswidener",
 	"depends": {
 		"fabricloader": ">=0.16.10",
-		"minecraft": "~1.20.1",
-		"java": ">=17",
+		"minecraft": "~1.20.5",
+		"java": ">=21",
 		"fabric-api": "*"
 	},
 	"suggests": {

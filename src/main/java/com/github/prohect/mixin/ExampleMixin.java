@@ -1,4 +1,4 @@
-package com.github.mixin;
+package com.github.prohect.mixin;
 
 import net.minecraft.server.MinecraftServer;
 import org.spongepowered.asm.mixin.Mixin;

@@ -1,4 +1,4 @@
-package com.github;
+package com.github.prohect;
 
 import net.fabricmc.api.ModInitializer;
 
@@ -19,6 +19,6 @@ public class TweakMouseSensitivity implements ModInitializer {
 		// However, some things (like resources) may still be uninitialized.
 		// Proceed with mild caution.
 
-//		LOGGER.info("Hello Fabric world!");
+		LOGGER.info("Hello Fabric world!");
 	}
 }
