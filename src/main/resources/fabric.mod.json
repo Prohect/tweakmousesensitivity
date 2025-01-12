@@ -1,42 +1,42 @@
 {
-  "schemaVersion": 1,
-  "id": "tweakmousesensitivity",
-  "version": "1.0.0.0",
-  "name": "tweakmousesensitivity",
-  "description": "This is an example description! Tell everyone what your mod is about!",
-  "authors": [
-    "prohect@foxmail.com!"
-  ],
-  "contact": {
-    "homepage": "https://fabricmc.net/",
-    "sources": "https://github.com/prohect/tweakmousesensitivity"
-  },
-  "license": "CC0-1.0",
-  "icon": "assets/tweakmousesensitivity/icon.png",
-  "environment": "*",
-  "entrypoints": {
-    "main": [
-      "com.github.prohect.ExampleMod"
-    ],
-    "client": [
-      "com.github.prohect.ExampleModClient"
-    ]
-  },
-  "mixins": [
-    "tweakmousesensitivity.mixins.json",
-    {
-      "config": "tweakmousesensitivity.client.mixins.json",
-      "environment": "client"
-    }
-  ],
-  "accessWidener": "tweakmousesensitivity.accesswidener",
-  "depends": {
-    "fabricloader": ">=0.16.9",
-    "minecraft": "~1.21.4",
-    "java": ">=21",
-    "fabric-api": "*"
-  },
-  "suggests": {
-    "another-mod": "*"
-  }
+	"schemaVersion": 1,
+	"id": "tweak-mouse-sensitivity",
+	"version": "1.0.0.0",
+	"name": "Tweak mouse sensitivity",
+	"description": "make a 20000 dpi or even higher mouse works fine in MC!",
+	"authors": [
+		"prohect@foxmail.com"
+	],
+	"contact": {
+		"homepage": "https://fabricmc.net/",
+		"sources": "https://github.com/Prohect/tweakmousesensitivity"
+	},
+	"license": "CC0-1.0",
+	"icon": "assets/tweak-mouse-sensitivity/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"com.github.TweakMouseSensitivity"
+		],
+		"client": [
+			"com.github.TweakMouseSensitivityClient"
+		]
+	},
+	"mixins": [
+		"tweak-mouse-sensitivity.mixins.json",
+		{
+			"config": "tweak-mouse-sensitivity.client.mixins.json",
+			"environment": "client"
+		}
+	],
+	"accessWidener": "tweak-mouse-sensitivity.accesswidener",
+	"depends": {
+		"fabricloader": ">=0.16.10",
+		"minecraft": "~1.20.1",
+		"java": ">=17",
+		"fabric-api": "*"
+	},
+	"suggests": {
+		"another-mod": "*"
+	}
 }
