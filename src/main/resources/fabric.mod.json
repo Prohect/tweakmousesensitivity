@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
   "id": "tweakmousesensitivity",
-  "version": "1.0.0.0",
+  "version": "${version}",
   "name": "tweakmousesensitivity",
-  "description": "This is an example description! Tell everyone what your mod is about!",
+  "description": "make a 20000 dpi or even higher mouse works fine in mc",
   "authors": [
     "prohect@foxmail.com!"
   ],
@@ -12,27 +12,27 @@
     "sources": "https://github.com/prohect/tweakmousesensitivity"
   },
   "license": "CC0-1.0",
-  "icon": "assets/tweakmousesensitivity/icon.png",
+  "icon": "assets/tweak-mouse-sensitivity/icon.png",
   "environment": "*",
   "entrypoints": {
     "main": [
-      "com.github.prohect.ExampleMod"
+      "com.github.prohect.TweakMouseSensitivity"
     ],
     "client": [
-      "com.github.prohect.ExampleModClient"
+      "com.github.prohect.TweakMouseSensitivityClient"
     ]
   },
   "mixins": [
-    "tweakmousesensitivity.mixins.json",
+    "tweak-mouse-sensitivity.mixins.json",
     {
-      "config": "tweakmousesensitivity.client.mixins.json",
+      "config": "tweak-mouse-sensitivity.client.mixins.json",
       "environment": "client"
     }
   ],
-  "accessWidener": "tweakmousesensitivity.accesswidener",
+  "accessWidener": "tweak-mouse-sensitivity.accesswidener",
   "depends": {
     "fabricloader": ">=0.16.9",
-    "minecraft": "~1.21.4",
+    "minecraft": "1.21.*",
     "java": ">=21",
     "fabric-api": "*"
   },

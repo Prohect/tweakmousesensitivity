@@ -2,7 +2,7 @@ package com.github.prohect;
 
 import net.fabricmc.api.ClientModInitializer;
 
-public class ExampleModClient implements ClientModInitializer {
+public class TweakMouseSensitivityClient implements ClientModInitializer {
 
 	@Override
 	public void onInitializeClient() {
