@@ -14,27 +14,31 @@ public class MixinMouse {
     private void updateMouse(double timeDelta, CallbackInfo ci) {
         try {
             var that = (Mouse) (Object) this;
-            Double value = that.client.options.getMouseSensitivity().getValue();
-            double d = value * 0.6F + 0.2F;
-            double e = d * d * d * (value + Double.MIN_NORMAL);
-            double f = e * 8.0;
-            double i;
-            double j;
+            //sensitivity is multiplied by 2 because the displayed value in game option gui is multiplied by 2
+            double sensitivity = that.client.options.getMouseSensitivity().getValue() * 2;
+            //divided by 0.15 because inside that.client.player.changeLookDirection(x,y), the value is multiplied by 0.15
+            //0.022 is same as counterStrike2
+            double f = 0.022 * sensitivity / 0.15;
+            double e = f / 8;
+            double deltaRaw;
+            double deltaPitch;
+            double cursorDeltaX = that.cursorDeltaX;
+            double cursorDeltaY = that.cursorDeltaY;
             if (that.client.options.smoothCameraEnabled) {
-                double g = that.cursorXSmoother.smooth(that.cursorDeltaX * f, timeDelta * f);
-                double h = that.cursorYSmoother.smooth(that.cursorDeltaY * f, timeDelta * f);
-                i = g;
-                j = h;
+                double g = that.cursorXSmoother.smooth(cursorDeltaX * f, timeDelta * f);
+                double h = that.cursorYSmoother.smooth(cursorDeltaY * f, timeDelta * f);
+                deltaRaw = g;
+                deltaPitch = h;
             } else if (that.client.options.getPerspective().isFirstPerson() && that.client.player.isUsingSpyglass()) {
                 that.cursorXSmoother.clear();
                 that.cursorYSmoother.clear();
-                i = that.cursorDeltaX * e;
-                j = that.cursorDeltaY * e;
+                deltaRaw = cursorDeltaX * e;
+                deltaPitch = cursorDeltaY * e;
             } else {
                 that.cursorXSmoother.clear();
                 that.cursorYSmoother.clear();
-                i = that.cursorDeltaX * f;
-                j = that.cursorDeltaY * f;
+                deltaRaw = cursorDeltaX * f;
+                deltaPitch = cursorDeltaY * f;
             }
 
             int k = 1;
@@ -42,9 +46,9 @@ public class MixinMouse {
                 k = -1;
             }
 
-            that.client.getTutorialManager().onUpdateMouse(i, j);
+            that.client.getTutorialManager().onUpdateMouse(deltaRaw, deltaPitch);
             if (that.client.player != null) {
-                that.client.player.changeLookDirection(i, j * (double) k);
+                that.client.player.changeLookDirection(deltaRaw, deltaPitch * (double) k);
             }
         } finally {
             ci.cancel();
