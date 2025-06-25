@@ -6,7 +6,7 @@ the dpi range provided by the mouse is going higher and higher, the origin mouse
 this mod only do one simple thing: multiply the origin mouse sensitivity by itself when processing
 
 ## branch subfix 'a'
-make is works like cs series or Apex
+make is works like cs series or Apex, while branch ".*_b" stays oringin idea
 
 ### Original Code:
 ```java
