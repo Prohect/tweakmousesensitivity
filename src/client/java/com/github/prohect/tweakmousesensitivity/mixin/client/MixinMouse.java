@@ -10,48 +10,51 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(Mouse.class)
 public class MixinMouse {
 
-	@Inject(at = @At("HEAD"), method = "updateMouse", cancellable = true)
-	private void updateMouse(double timeDelta, CallbackInfo ci) {
-		try {
-			var that = (Mouse) (Object) this;
-			//sensitivity is multiplied by 2 because the displayed value in game option gui is multiplied by 2
-			double sensitivity = that.client.options.getMouseSensitivity().getValue() * 2;
-			//divided by 0.15 because inside that.client.player.changeLookDirection(x,y), the value is multiplied by 0.15
-			//0.022 is same as counterStrike2
-			double f = 0.022 * sensitivity / 0.15;
-			double e = f / 8;
-			double deltaRaw;
-			double deltaPitch;
-			double cursorDeltaX = that.cursorDeltaX;
-			double cursorDeltaY = that.cursorDeltaY;
-			if (that.client.options.smoothCameraEnabled) {
-				double g = that.cursorXSmoother.smooth(cursorDeltaX * f, timeDelta * f);
-				double h = that.cursorYSmoother.smooth(cursorDeltaY * f, timeDelta * f);
-				deltaRaw = g;
-				deltaPitch = h;
-			} else if (that.client.options.getPerspective().isFirstPerson() && that.client.player.isUsingSpyglass()) {
-				that.cursorXSmoother.clear();
-				that.cursorYSmoother.clear();
-				deltaRaw = cursorDeltaX * e;
-				deltaPitch = cursorDeltaY * e;
-			} else {
-				that.cursorXSmoother.clear();
-				that.cursorYSmoother.clear();
-				deltaRaw = cursorDeltaX * f;
-				deltaPitch = cursorDeltaY * f;
-			}
+    @Inject(at = @At("HEAD"), method = "updateMouse", cancellable = true)
+    private void updateMouse(double timeDelta, CallbackInfo ci) {
+        try {
+            var that = (Mouse) (Object) this;
+            if (that.isCursorLocked() && that.client.isWindowFocused()) {
+                Double value = that.client.options.getMouseSensitivity().getValue();
+                double f = value * 0.6F + 0.2F;
+                double g = f * f * f * value;
+                double h = g * 8.0;
+                double k;
+                double l;
+                if (that.client.options.smoothCameraEnabled) {
+                    double i = that.cursorXSmoother.smooth(that.cursorDeltaX * h, timeDelta * h);
+                    double j = that.cursorYSmoother.smooth(that.cursorDeltaY * h, timeDelta * h);
+                    k = i;
+                    l = j;
+                } else if (that.client.options.getPerspective().isFirstPerson() && that.client.player.isUsingSpyglass()) {
+                    that.cursorXSmoother.clear();
+                    that.cursorYSmoother.clear();
+                    k = that.cursorDeltaX * g;
+                    l = that.cursorDeltaY * g;
+                } else {
+                    that.cursorXSmoother.clear();
+                    that.cursorYSmoother.clear();
+                    k = that.cursorDeltaX * h;
+                    l = that.cursorDeltaY * h;
+                }
 
-			int k = 1;
-			if (that.client.options.getInvertYMouse().getValue()) {
-				k = -1;
-			}
+                that.cursorDeltaX = 0.0;
+                that.cursorDeltaY = 0.0;
+                int m = 1;
+                if (that.client.options.getInvertYMouse().getValue()) {
+                    m = -1;
+                }
 
-			that.client.getTutorialManager().onUpdateMouse(deltaRaw, deltaPitch);
-			if (that.client.player != null) {
-				that.client.player.changeLookDirection(deltaRaw, deltaPitch * (double) k);
-			}
-		} finally {
-			ci.cancel();
-		}
-	}
+                that.client.getTutorialManager().onUpdateMouse(k, l);
+                if (that.client.player != null) {
+                    that.client.player.changeLookDirection(k, l * (double) m);
+                }
+            } else {
+                that.cursorDeltaX = 0.0;
+                that.cursorDeltaY = 0.0;
+            }
+        } finally {
+            ci.cancel();
+        }
+    }
 }
