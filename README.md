@@ -5,7 +5,7 @@
 the dpi range provided by the mouse is going higher and higher, the origin mouse sensitivity procedure is not working cool when u set dpi to value like 20000.
 this mod only do one simple thing: multiply the origin mouse sensitivity by itself when processing
 
-## branch subfix 'a'
+## branch suffix 'a'
 make is works like cs series or Apex, while branch ".*_b" stays oringin idea
 
 ### Original Code:
