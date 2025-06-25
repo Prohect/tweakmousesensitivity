@@ -1,42 +1,41 @@
 {
-  "schemaVersion": 1,
-  "id": "tweakmousesensitivity",
-  "version": "${version}",
-  "name": "tweakmousesensitivity",
-  "description": "make a 20000 dpi or even higher mouse works fine in mc",
-  "authors": [
-    "prohect@foxmail.com!"
-  ],
-  "contact": {
-    "homepage": "https://fabricmc.net/",
-    "sources": "https://github.com/prohect/tweakmousesensitivity"
-  },
-  "license": "CC0-1.0",
-  "icon": "assets/tweak-mouse-sensitivity/icon.png",
-  "environment": "*",
-  "entrypoints": {
-    "main": [
-      "com.github.prohect.TweakMouseSensitivity"
-    ],
-    "client": [
-      "com.github.prohect.TweakMouseSensitivityClient"
-    ]
-  },
-  "mixins": [
-    "tweak-mouse-sensitivity.mixins.json",
-    {
-      "config": "tweak-mouse-sensitivity.client.mixins.json",
-      "environment": "client"
-    }
-  ],
-  "accessWidener": "tweak-mouse-sensitivity.accesswidener",
-  "depends": {
-    "fabricloader": ">=0.16.9",
-    "minecraft": "1.21.*",
-    "java": ">=21",
-    "fabric-api": "*"
-  },
-  "suggests": {
-    "another-mod": "*"
-  }
+	"schemaVersion": 1,
+	"id": "tweakmousesensitivity",
+	"version": "${version}",
+	"name": "tweakmousesensitivity",
+	"description": "This is an example description! Tell everyone what your mod is about!",
+	"authors": [
+		"Me!"
+	],
+	"contact": {
+		"homepage": "https://fabricmc.net/",
+		"sources": "https://github.com/FabricMC/fabric-example-mod"
+	},
+	"license": "CC0-1.0",
+	"icon": "assets/tweakmousesensitivity/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"com.github.prohect.tweakmousesensitivity.Tweakmousesensitivity"
+		],
+		"client": [
+			"com.github.prohect.tweakmousesensitivity.TweakmousesensitivityClient"
+		]
+	},
+	"mixins": [
+		"tweakmousesensitivity.mixins.json",
+		{
+			"config": "tweakmousesensitivity.client.mixins.json",
+			"environment": "client"
+		}
+	],
+	"depends": {
+		"fabricloader": ">=0.16.14",
+		"minecraft": "~1.21.6",
+		"java": ">=21",
+		"fabric-api": "*"
+	},
+	"suggests": {
+		"another-mod": "*"
+	}
 }

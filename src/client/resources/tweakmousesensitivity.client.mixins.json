@@ -1,0 +1,11 @@
+{
+  "required": true,
+  "package": "com.github.prohect.tweakmousesensitivity.mixin.client",
+  "compatibilityLevel": "JAVA_21",
+  "client": [
+    "MixinMouse"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+	}
+}
