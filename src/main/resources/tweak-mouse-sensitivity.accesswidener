@@ -5,3 +5,5 @@ accessible field net/minecraft/client/Mouse cursorXSmoother Lnet/minecraft/util/
 accessible field net/minecraft/client/Mouse cursorYSmoother Lnet/minecraft/util/math/Smoother;
 accessible field net/minecraft/client/Mouse cursorDeltaX D
 accessible field net/minecraft/client/Mouse cursorDeltaY D
+accessible method net/minecraft/client/option/GameOptions getPercentValueText (Lnet/minecraft/text/Text;D)Lnet/minecraft/text/Text;
+accessible class net/minecraft/client/option/SimpleOption$Callbacks
