@@ -24,7 +24,29 @@ public class MixinMouse {
     @Unique
     private double lastRaw = Double.NaN;
     @Unique
-    private SimpleOption<Double> bufferedOption;
+    private final SimpleOption<Double> bufferedOption = new SimpleOption<>("options.sensitivity", SimpleOption.emptyTooltip(), (optionText, value) -> {
+        if (value == 0.0) {
+            return getGenericValueText(optionText, Text.translatable("options.sensitivity.min"));
+        } else {
+            return value == 1.0 ? getGenericValueText(optionText, Text.translatable("options.sensitivity.max")) : getPercentValueText(optionText, 2.0 * value);
+        }
+    }, new SimpleOption.Callbacks<>() {
+        @Override
+        public Function<SimpleOption<Double>, ClickableWidget> getWidgetCreator(SimpleOption.TooltipFactory<Double> tooltipFactory, GameOptions gameOptions, int x, int y, int width, Consumer<Double> changeCallback) {
+            return null;
+        }
+
+        @Override
+        public Optional<Double> validate(Double value) {
+            return Optional.of(value);
+        }
+
+        @Override
+        public Codec<Double> codec() {
+            return null;
+        }
+    }, 0.5, value -> {
+    });
 
     @Redirect(
             method = "updateMouse",
@@ -34,38 +56,11 @@ public class MixinMouse {
             )
     )
     private SimpleOption<Double> redirectMouseSensitivity(GameOptions options) {
-        double raw = options.getMouseSensitivity().getValue(); // internal 0.0–0.5 for 0–100 %
-        if (bufferedOption == null) {
-            bufferedOption = new SimpleOption<>("options.sensitivity", SimpleOption.emptyTooltip(), (optionText, value) -> {
-                if (value == 0.0) {
-                    return getGenericValueText(optionText, Text.translatable("options.sensitivity.min"));
-                } else {
-                    return value == 1.0 ? getGenericValueText(optionText, Text.translatable("options.sensitivity.max")) : getPercentValueText(optionText, 2.0 * value);
-                }
-            }, new SimpleOption.Callbacks<>() {
-                @Override
-                public Function<SimpleOption<Double>, ClickableWidget> getWidgetCreator(SimpleOption.TooltipFactory<Double> tooltipFactory, GameOptions gameOptions, int x, int y, int width, Consumer<Double> changeCallback) {
-                    return null;
-                }
-
-                @Override
-                public Optional<Double> validate(Double value) {
-                    return Optional.of(value);
-                }
-
-                @Override
-                public Codec<Double> codec() {
-                    return null;
-                }
-            }, 0.5, value -> {
-            });
-        }
+        double raw = options.getMouseSensitivity().getValue();
         if (raw != lastRaw) {
             lastRaw = raw;
-            bufferedOption.setValue(((Math.pow(2 * raw * 0.022d / 0.15d, 1d / 3d) / 2d) - 0.2d) / 0.6d);
+            bufferedOption.setValue(((Math.cbrt(2 * raw * 0.022d / 0.15d) / 2d) - 0.2d) / 0.6d);
         }
-
-        // Wrap a SimpleOption that always returns our fake value
         return bufferedOption;
     }
 
