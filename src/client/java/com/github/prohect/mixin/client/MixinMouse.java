@@ -36,14 +36,9 @@ public class MixinMouse {
                 j = that.cursorDeltaY * f;
             }
 
-            int k = 1;
-            if (that.client.options.getInvertYMouse().getValue()) {
-                k = -1;
-            }
-
             that.client.getTutorialManager().onUpdateMouse(i, j);
             if (that.client.player != null) {
-                that.client.player.changeLookDirection(i, j * (double) k);
+                that.client.player.changeLookDirection(i, j);
             }
 
         } finally {
