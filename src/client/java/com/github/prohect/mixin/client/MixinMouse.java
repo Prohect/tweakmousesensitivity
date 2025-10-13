@@ -13,7 +13,7 @@ public class MixinMouse {
     @Inject(at = @At("HEAD"), method = "updateMouse", cancellable = true)
     private void updateMouse(double timeDelta, CallbackInfo ci) {
         try {
-            var that = (Mouse) (Object) this;
+            @SuppressWarnings("DataFlowIssue") var that = (Mouse) (Object) this;
             //sensitivity is multiplied by 2 because the displayed value in game option gui is multiplied by 2
             double sensitivity = that.client.options.getMouseSensitivity().getValue() * 2;
             //divided by 0.15 because inside that.client.player.changeLookDirection(x,y), the value is multiplied by 0.15
@@ -41,14 +41,9 @@ public class MixinMouse {
                 deltaPitch = cursorDeltaY * f;
             }
 
-            int k = 1;
-            if (that.client.options.getInvertYMouse().getValue()) {
-                k = -1;
-            }
-
             that.client.getTutorialManager().onUpdateMouse(deltaRaw, deltaPitch);
             if (that.client.player != null) {
-                that.client.player.changeLookDirection(deltaRaw, deltaPitch * (double) k);
+                that.client.player.changeLookDirection(deltaRaw, deltaPitch);
             }
         } finally {
             ci.cancel();
