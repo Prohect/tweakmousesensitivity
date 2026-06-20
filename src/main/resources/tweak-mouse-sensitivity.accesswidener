@@ -5,4 +5,3 @@ accessible field net/minecraft/client/MouseHandler smoothTurnX Lnet/minecraft/ut
 accessible field net/minecraft/client/MouseHandler smoothTurnY Lnet/minecraft/util/SmoothDouble;
 accessible field net/minecraft/client/MouseHandler accumulatedDX D
 accessible field net/minecraft/client/MouseHandler accumulatedDY D
-accessible method net/minecraft/client/Options percentValueLabel (Lnet/minecraft/network/chat/Component;D)Lnet/minecraft/network/chat/Component;
