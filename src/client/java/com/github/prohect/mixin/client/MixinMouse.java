@@ -1,11 +1,11 @@
 package com.github.prohect.mixin.client;
 
 import com.mojang.serialization.Codec;
-import net.minecraft.client.Mouse;
-import net.minecraft.client.gui.widget.ClickableWidget;
-import net.minecraft.client.option.GameOptions;
-import net.minecraft.client.option.SimpleOption;
-import net.minecraft.text.Text;
+import net.minecraft.client.MouseHandler;
+import net.minecraft.client.OptionInstance;
+import net.minecraft.client.Options;
+import net.minecraft.client.gui.components.AbstractWidget;
+import net.minecraft.network.chat.Component;
 import org.spongepowered.asm.mixin.Mixin;
 
 import org.spongepowered.asm.mixin.Unique;
@@ -16,28 +16,28 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-import static net.minecraft.client.option.GameOptions.getGenericValueText;
-import static net.minecraft.client.option.GameOptions.getPercentValueText;
+import static net.minecraft.client.Options.genericValueLabel;
+import static net.minecraft.client.Options.percentValueLabel;
 
-@Mixin(Mouse.class)
+@Mixin(MouseHandler.class)
 public class MixinMouse {
     @Unique
     private double lastRaw = Double.NaN;
     @Unique
-    private final SimpleOption<Double> bufferedOption = new SimpleOption<>("options.sensitivity", SimpleOption.emptyTooltip(), (optionText, value) -> {
+    private final OptionInstance<Double> bufferedOption = new OptionInstance<>("options.sensitivity", OptionInstance.noTooltip(), (caption, value) -> {
         if (value == 0.0) {
-            return getGenericValueText(optionText, Text.translatable("options.sensitivity.min"));
+            return genericValueLabel(caption, Component.translatable("options.sensitivity.min"));
         } else {
-            return value == 1.0 ? getGenericValueText(optionText, Text.translatable("options.sensitivity.max")) : getPercentValueText(optionText, 2.0 * value);
+            return value == 1.0 ? genericValueLabel(caption, Component.translatable("options.sensitivity.max")) : percentValueLabel(caption, 2.0 * value);
         }
-    }, new SimpleOption.Callbacks<>() {
+    }, new OptionInstance.ValueSet<>() {
         @Override
-        public Function<SimpleOption<Double>, ClickableWidget> getWidgetCreator(SimpleOption.TooltipFactory<Double> tooltipFactory, GameOptions gameOptions, int x, int y, int width, Consumer<Double> changeCallback) {
+        public Function<OptionInstance<Double>, AbstractWidget> createButton(OptionInstance.TooltipSupplier<Double> tooltipSupplier, Options gameOptions, int x, int y, int width, Consumer<Double> changeCallback) {
             return null;
         }
 
         @Override
-        public Optional<Double> validate(Double value) {
+        public Optional<Double> validateValue(Double value) {
             return Optional.of(value);
         }
 
@@ -45,59 +45,58 @@ public class MixinMouse {
         public Codec<Double> codec() {
             return null;
         }
-    }, 0.5, value -> {
-    });
+    }, 0.5, value -> {});
 
     @Redirect(
-            method = "updateMouse",
+            method = "turnPlayer",
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/client/option/GameOptions;getMouseSensitivity()Lnet/minecraft/client/option/SimpleOption;"
+                    target = "Lnet/minecraft/client/Options;sensitivity()Lnet/minecraft/client/OptionInstance;"
             )
     )
-    private SimpleOption<Double> redirectMouseSensitivity(GameOptions options) {
-        double raw = options.getMouseSensitivity().getValue();
+    private OptionInstance<Double> redirectMouseSensitivity(Options options) {
+        double raw = options.sensitivity().get();
         if (raw != lastRaw) {
             lastRaw = raw;
-            bufferedOption.setValue(((Math.cbrt(2 * raw * 0.022d / 0.15d) / 2d) - 0.2d) / 0.6d);
+            bufferedOption.set(((Math.cbrt(2 * raw * 0.022d / 0.15d) / 2d) - 0.2d) / 0.6d);
         }
         return bufferedOption;
     }
 
-/*    @Inject(at = @At("HEAD"), method = "updateMouse", cancellable = true)
-    private void updateMouse(double timeDelta, CallbackInfo ci) {
+/*    @Inject(at = @At("HEAD"), method = "turnPlayer", cancellable = true)
+    private void turnPlayer(double timeDelta, CallbackInfo ci) {
         try {
-            @SuppressWarnings("DataFlowIssue") var that = (Mouse) (Object) this;
+            @SuppressWarnings("DataFlowIssue") var that = (MouseHandler) (Object) this;
             //sensitivity is multiplied by 2 because the displayed value in game option gui is multiplied by 2
-            double sensitivity = that.client.options.getMouseSensitivity().getValue() * 2;
+            double sensitivity = that.minecraft.options.sensitivity().get() * 2;
             //divided by 0.15 because inside that.client.player.changeLookDirection(x,y), the value is multiplied by 0.15
             //0.022 is same as counterStrike2
             double f = 0.022 * sensitivity / 0.15;
             double e = f / 8;
             double deltaRaw;
             double deltaPitch;
-            double cursorDeltaX = that.cursorDeltaX;
-            double cursorDeltaY = that.cursorDeltaY;
-            if (that.client.options.smoothCameraEnabled) {
-                double g = that.cursorXSmoother.smooth(cursorDeltaX * f, timeDelta * f);
-                double h = that.cursorYSmoother.smooth(cursorDeltaY * f, timeDelta * f);
+            double accumulatedDX = that.accumulatedDX;
+            double accumulatedDY = that.accumulatedDY;
+            if (that.minecraft.options.smoothCameraEnabled) {
+                double g = that.smoothTurnX.smooth(accumulatedDX * f, timeDelta * f);
+                double h = that.smoothTurnY.smooth(accumulatedDY * f, timeDelta * f);
                 deltaRaw = g;
                 deltaPitch = h;
-            } else if (that.client.options.getPerspective().isFirstPerson() && that.client.player.isUsingSpyglass()) {
-                that.cursorXSmoother.clear();
-                that.cursorYSmoother.clear();
-                deltaRaw = cursorDeltaX * e;
-                deltaPitch = cursorDeltaY * e;
+            } else if (that.minecraft.options.getPerspective().isFirstPerson() && that.minecraft.player.isUsingSpyglass()) {
+                that.smoothTurnX.clear();
+                that.smoothTurnY.clear();
+                deltaRaw = accumulatedDX * e;
+                deltaPitch = accumulatedDY * e;
             } else {
-                that.cursorXSmoother.clear();
-                that.cursorYSmoother.clear();
-                deltaRaw = cursorDeltaX * f;
-                deltaPitch = cursorDeltaY * f;
+                that.smoothTurnX.clear();
+                that.smoothTurnY.clear();
+                deltaRaw = accumulatedDX * f;
+                deltaPitch = accumulatedDY * f;
             }
 
-            that.client.getTutorialManager().onUpdateMouse(deltaRaw, deltaPitch);
-            if (that.client.player != null) {
-                that.client.player.changeLookDirection(deltaRaw, deltaPitch);
+            that.minecraft.getTutorialManager().onUpdateMouse(deltaRaw, deltaPitch);
+            if (that.minecraft.player != null) {
+                that.minecraft.player.changeLookDirection(deltaRaw, deltaPitch);
             }
         } finally {
             ci.cancel();
