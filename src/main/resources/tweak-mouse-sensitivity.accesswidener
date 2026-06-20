@@ -1,9 +1,8 @@
-accessWidener v2 named
+accessWidener v2 official
 # Comments like this are supported, as well as at the end of the line
-accessible field net/minecraft/client/Mouse client Lnet/minecraft/client/MinecraftClient;
-accessible field net/minecraft/client/Mouse cursorXSmoother Lnet/minecraft/util/math/Smoother;
-accessible field net/minecraft/client/Mouse cursorYSmoother Lnet/minecraft/util/math/Smoother;
-accessible field net/minecraft/client/Mouse cursorDeltaX D
-accessible field net/minecraft/client/Mouse cursorDeltaY D
-accessible method net/minecraft/client/option/GameOptions getPercentValueText (Lnet/minecraft/text/Text;D)Lnet/minecraft/text/Text;
-accessible class net/minecraft/client/option/SimpleOption$Callbacks
+accessible field net/minecraft/client/MouseHandler minecraft Lnet/minecraft/client/Minecraft;
+accessible field net/minecraft/client/MouseHandler smoothTurnX Lnet/minecraft/util/SmoothDouble;
+accessible field net/minecraft/client/MouseHandler smoothTurnY Lnet/minecraft/util/SmoothDouble;
+accessible field net/minecraft/client/MouseHandler accumulatedDX D
+accessible field net/minecraft/client/MouseHandler accumulatedDY D
+accessible method net/minecraft/client/Options percentValueLabel (Lnet/minecraft/network/chat/Component;D)Lnet/minecraft/network/chat/Component;
